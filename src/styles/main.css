@@ -66,9 +66,9 @@
   --hero-glow-strong: rgba(200, 16, 46, 0.14);
   --hero-glow-cool: rgba(255, 255, 255, 0.6);
   --hero-veil: rgba(245, 244, 244, 0.6);
-  --grain-opacity: 0.035;
+  --grain-opacity: 0.03;
   --grain-blend: multiply;
-  --sheen-opacity: 0.5;
+  --sheen-opacity: 0.22;
   --accent-shadow: rgba(200, 16, 46, 0.4);
   --glass-shadow: rgba(18, 17, 18, 0.5);
 }
@@ -100,7 +100,7 @@
   --hero-veil: rgba(8, 7, 8, 0.62);
   --grain-opacity: 0.06;
   --grain-blend: overlay;
-  --sheen-opacity: 0.24;
+  --sheen-opacity: 0.16;
   --accent-shadow: rgba(226, 24, 47, 0.5);
   --glass-shadow: rgba(0, 0, 0, 0.7);
 }
@@ -592,7 +592,7 @@ input:focus-visible,
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 600px;
+  max-width: 560px;
   transform-style: preserve-3d;
   will-change: transform;
 }
@@ -864,8 +864,18 @@ input:focus-visible,
   animation: heroFrameIn 1050ms var(--ease-out) 180ms both;
 }
 
+/* Opacity only: the tilt loop writes an inline transform on this element */
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .sneaker-shadow {
-  animation: heroRise 900ms var(--ease-out) 380ms both;
+  animation: heroFadeIn 760ms var(--ease-out) 380ms both;
 }
 
 /* SECTION 2: Pinned 4-Angle Environmental Showcase */
@@ -2199,9 +2209,10 @@ input:focus-visible,
   }
 
   .hero-orb--crimson {
-    top: 22%;
-    right: -34%;
-    width: 112vw;
+    top: 40%;
+    right: -26%;
+    width: 86vw;
+    opacity: 0.72;
     animation: none;
   }
 
