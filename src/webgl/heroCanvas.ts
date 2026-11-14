@@ -66,8 +66,12 @@ export function initHeroCanvas(canvas: HTMLCanvasElement | null): () => void {
     vec3 crimsonCol = mix(lightAccent, darkAccent, u_isDark);
 
     vec3 col = baseCol;
-    col = mix(col, crimsonCol, glow * (u_isDark > 0.5 ? 0.16 : 0.075));
-    col += crimsonCol * line * (u_isDark > 0.5 ? 0.055 : 0.038);
+    col = mix(col, crimsonCol, glow * mix(0.075, 0.2, u_isDark));
+    col += crimsonCol * line * mix(0.038, 0.085, u_isDark);
+
+    // Night mode: pull the corners down so the copy and product plate sit forward
+    float vig = smoothstep(1.3, 0.12, length(p * vec2(0.94, 1.0)));
+    col *= mix(1.0, mix(0.7, 1.0, vig), u_isDark);
 
     outColor = vec4(col, 1.0);
   }`;
