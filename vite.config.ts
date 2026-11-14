@@ -11,6 +11,5 @@ export default defineConfig({
 });
 
 export default defineConfig({
-  base: '/Nike-Jordan-website/',
-  // ... keep your existing plugins/config here
+ base: '/',
 })
