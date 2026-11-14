@@ -244,7 +244,16 @@ function computeFit(cm: number, wide: boolean) {
 }
 
 export default function App() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('light');
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    if (typeof window === 'undefined') return 'light';
+    try {
+      const stored = window.localStorage.getItem('aj1-theme');
+      if (stored === 'dark' || stored === 'light') return stored;
+    } catch {
+      /* storage unavailable, fall through to the studio light default */
+    }
+    return 'light';
+  });
   const [colorway, setColorway] = useState<ColorwayId>('chicago');
   const [size, setSize] = useState<SizeLabel>('US 10');
   const [price, setPrice] = useState<number>(180);
@@ -292,6 +301,11 @@ export default function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    try {
+      window.localStorage.setItem('aj1-theme', theme);
+    } catch {
+      /* ignore private-mode storage failures */
+    }
   }, [theme]);
 
   useEffect(() => {
@@ -756,12 +770,23 @@ export default function App() {
             aria-hidden="true"
           />
 
+          <div className="hero-atmos" aria-hidden="true">
+            <span className="hero-orb hero-orb--crimson" />
+            <span className="hero-orb hero-orb--cool" />
+            <span className="hero-grain" />
+            <span className="hero-vignette" />
+            <span className="hero-fade" />
+          </div>
+
           <div className="container hero-grid">
             <div className="hero-copy">
               <p className="hero-kicker">
+                <span className="kicker-rule" aria-hidden="true" />
                 Air Jordan 1 High OG · {activeColorwayMeta.code}
               </p>
-              <h1 className="hero-title">Born to fly.</h1>
+              <h1 className="hero-title">
+                Born to fly<span className="accent-dot">.</span>
+              </h1>
               <p className="hero-sub">
                 Full-grain tumbled leather, encapsulated Nike Air cushioning,
                 and the unmistakable 1985 high-top profile engineered to command
@@ -800,6 +825,21 @@ export default function App() {
                   </svg>
                 </a>
               </div>
+
+              <ul className="hero-meta">
+                <li>
+                  <span className="meta-val">1985</span>
+                  <span className="meta-key">Original silhouette</span>
+                </li>
+                <li>
+                  <span className="meta-val">14 mm</span>
+                  <span className="meta-key">Air-Sole heel</span>
+                </li>
+                <li>
+                  <span className="meta-val">360°</span>
+                  <span className="meta-key">Pivot tread</span>
+                </li>
+              </ul>
             </div>
 
             <div className="hero-stage" ref={heroStageRef} id="hero-stage">
@@ -817,6 +857,11 @@ export default function App() {
                     id="hero-sneaker-img"
                     referrerPolicy="no-referrer"
                   />
+                  <span className="frame-sheen" aria-hidden="true" />
+                  <span className="frame-tick frame-tick--tl" aria-hidden="true" />
+                  <span className="frame-tick frame-tick--tr" aria-hidden="true" />
+                  <span className="frame-tick frame-tick--bl" aria-hidden="true" />
+                  <span className="frame-tick frame-tick--br" aria-hidden="true" />
                 </div>
               </div>
               <div className="sneaker-shadow" ref={shadowRef} aria-hidden="true" />
@@ -851,6 +896,13 @@ export default function App() {
               </div>
             </div>
           </div>
+
+          <a href="#showcase" className="hero-scroll" aria-label="Scroll to showcase">
+            Scroll
+            <span className="hero-scroll-rail" aria-hidden="true">
+              <span className="hero-scroll-dot" />
+            </span>
+          </a>
         </section>
 
         {/* SECTION 2: Pinned 4-Angle Environmental Showcase */}
